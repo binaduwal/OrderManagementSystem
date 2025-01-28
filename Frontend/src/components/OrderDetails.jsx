@@ -55,27 +55,35 @@ function OrderDetails() {
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">#{order.id}</dd>
           </div>
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Customer</dt>
+            <dt className="text-sm font-medium text-gray-500">Customer Name</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{order.customer}</dd>
+          </div>
+          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Order Date</dt>
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{order.date}</dd>
           </div>
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Total Amount</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">${order.total}</dd>
-          </div>
-          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Date</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{order.date}</dd>
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">Rs. {order.total}</dd>
           </div>
           {order.items && order.items.length > 0 && (
-            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Items</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 <ul className="divide-y divide-gray-200">
                   {order.items.map((item, index) => (
                     <li key={item._id || index} className="py-2">
-                      <div className="flex justify-between">
-                        <span>{item.itemName}</span>
-                        <span>{item.quantity} x ${item.price}</span>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <span className="font-medium">{item.itemName}</span>
+                          <span className="ml-2 text-gray-500">({item.quantity} items)</span>
+                        </div>
+                        <div className="text-right">
+                          <div>Rs. {item.price} each</div>
+                          <div className="text-sm text-gray-500">
+                            Total: Rs. {(item.quantity * item.price).toFixed(2)}
+                          </div>
+                        </div>
                       </div>
                     </li>
                   ))}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useOrders } from '../context/OrderContext';
 
 function OrderList() {
@@ -7,11 +7,13 @@ function OrderList() {
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 5; // You can adjust this number
   const [deleteError, setDeleteError] = useState(null);
+  const navigate = useNavigate();
 
   const handleDelete = async (id) => {
     if (!id) {
       console.error("Order ID is undefined.");
       return;
+      
     }
   
     if (window.confirm("Are you sure you want to delete this order?")) {
@@ -25,6 +27,10 @@ function OrderList() {
     }
   };
   
+  const handleRowClick = (orderId) => {
+    navigate(`/orders/${orderId}`);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-48">
@@ -117,11 +123,18 @@ function OrderList() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentOrders.map((order) => (
-                    <tr key={order._id || order.id} className="hover:bg-gray-50">
+                    <tr 
+                      key={order._id || order.id} 
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={(e) => {
+                        // Prevent row click if clicking on actions
+                        if (!e.target.closest('.actions-column')) {
+                          handleRowClick(order.id);
+                        }
+                      }}
+                    >
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        <Link to={`/orders/${order.id}`} className="text-blue-600 hover:text-blue-800">
-                          #{order.id}
-                        </Link>
+                        #{order.id}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {order.customer}
@@ -132,11 +145,12 @@ function OrderList() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {order.date}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 actions-column">
                         <div className="flex space-x-3">
                           <Link
                             to={`/orders/${order.id}/edit`}
                             className="text-gray-600 hover:text-gray-900"
+                            onClick={(e) => e.stopPropagation()} // Prevent row click when clicking edit
                           >
                             <svg 
                               width="20" 
@@ -152,7 +166,10 @@ function OrderList() {
                             </svg>
                           </Link>
                           <button
-                            onClick={() => handleDelete(order._id || order.id)}
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent row click when clicking delete
+                              handleDelete(order._id || order.id);
+                            }}
                             className="text-gray-600 hover:text-gray-900"
                           >
                             <svg 
