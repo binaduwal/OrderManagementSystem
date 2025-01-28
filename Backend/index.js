@@ -4,34 +4,57 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const orderRoutes = require('./src/routes/Order.route');
-const connectDB = require('./src/DB/db');
 
 // Load environment variables
 dotenv.config();
-connectDB();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// Updated CORS configuration
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Mount routes directly (not under /api)
+app.use('/', orderRoutes);
 
-//using routes
-app.use('/orders', orderRoutes);
-
-// Basic route
-app.get('/', (req, res) => {
-    res.send('Welcome to the API');
+// Error handling for 404
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
 });
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    message: 'Something went wrong!',
+    error: err.message
+  });
+});
 
 // Define port
-const PORT =  3000;
+const PORT = process.env.PORT || 3000;
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Connect to database and start server
+const startServer = async () => {
+    try {
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log('Connected to MongoDB');
+        
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error('Server startup error:', error);
+        process.exit(1);
+    }
+};
+
+startServer();
 

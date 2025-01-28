@@ -72,7 +72,7 @@ export const createOrder = async (orderData) => {
 
 export const updateOrder = async (id, orderData) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/orders/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/orders/update/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -106,8 +106,6 @@ export const updateOrder = async (id, orderData) => {
     throw error;
   }
 };
-
-// 
 
 export const deleteOrder = async (id) => {
   try {

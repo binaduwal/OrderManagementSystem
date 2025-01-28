@@ -9,18 +9,22 @@ function OrderList() {
   const [deleteError, setDeleteError] = useState(null);
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this order?')) {
+    if (!id) {
+      console.error("Order ID is undefined.");
+      return;
+    }
+  
+    if (window.confirm("Are you sure you want to delete this order?")) {
       try {
         setDeleteError(null);
-        await removeOrder(id);
-        // The state will be updated in the context
+        await removeOrder(id); // Pass valid `id` here
       } catch (error) {
         setDeleteError(error.message);
-        console.error('Failed to delete order:', error);
+        console.error("Failed to delete order:", error);
       }
     }
   };
-
+  
   if (loading) {
     return (
       <div className="flex justify-center items-center h-48">
@@ -113,7 +117,7 @@ function OrderList() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50">
+                    <tr key={order._id || order.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         <Link to={`/orders/${order.id}`} className="text-blue-600 hover:text-blue-800">
                           #{order.id}

@@ -186,10 +186,15 @@ function OrderForm() {
               <div>
                 <label className="block text-sm font-medium text-gray-700">Price per Unit (Rs.)</label>
                 <input
-                  type="number"
-                  placeholder="0"
+                  type="text"
+                  placeholder="Enter price"
                   value={item.price === 0 ? '' : item.price}
-                  onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value) || 0)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                      handleItemChange(index, 'price', parseFloat(value) || 0);
+                    }
+                  }}
                   className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500
                     ${errors[`price${index}`] ? 'border-red-500' : ''}`}
                 />
