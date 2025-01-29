@@ -29,69 +29,105 @@ function OrderDetails() {
   }
 
   return (
-    <div className="bg-white shadow rounded-lg overflow-hidden">
-      <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-900">Order Details</h2>
-        <div className="space-x-4">
+    <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center space-x-4">
+            <Link
+              to="/orders"
+              className="flex items-center text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+            >
+              <svg 
+                className="w-6 h-6" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+            </Link>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              Order Details
+            </h2>
+          </div>
           <Link
             to={`/orders/${id}/edit`}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            className="bg-gradient-to-r from-cyan-500 to-blue-500 
+                     hover:from-cyan-600 hover:to-blue-600
+                     text-white px-4 py-2 rounded-lg
+                     transform hover:-translate-y-0.5 transition-all duration-200
+                     shadow-lg hover:shadow-cyan-500/25
+                     flex items-center space-x-2"
           >
-            Edit Order
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            <span>Edit Order</span>
           </Link>
-          <button
-            onClick={() => navigate('/orders')}
-            className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300"
-          >
-            Back to Orders
-          </button>
         </div>
-      </div>
-      
-      <div className="border-t border-gray-200">
-        <dl>
-          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Order ID</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">#{order.id}</dd>
+
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl shadow-xl border border-gray-700/50 p-6">
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="bg-gray-900/50 p-4 rounded-lg border border-gray-700/30">
+              <span className="text-gray-400 text-sm">Order ID</span>
+              <p className="text-gray-200 font-medium text-lg">#{order.id}</p>
+            </div>
+            <div className="bg-gray-900/50 p-4 rounded-lg border border-gray-700/30">
+              <span className="text-gray-400 text-sm">Order Date</span>
+              <p className="text-gray-200 font-medium text-lg">{order.date}</p>
+            </div>
+            <div className="bg-gray-900/50 p-4 rounded-lg border border-gray-700/30">
+              <span className="text-gray-400 text-sm">Customer Name</span>
+              <p className="text-gray-200 font-medium text-lg">{order.customer}</p>
+            </div>
+            <div className="bg-gray-900/50 p-4 rounded-lg border border-gray-700/30">
+              <span className="text-gray-400 text-sm">Total Amount</span>
+              <p className="text-gray-200 font-medium text-lg">Rs. {order.total.toFixed(2)}</p>
+            </div>
           </div>
-          <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Customer Name</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{order.customer}</dd>
-          </div>
-          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Order Date</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{order.date}</dd>
-          </div>
-          <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Total Amount</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">Rs. {order.total}</dd>
-          </div>
+
           {order.items && order.items.length > 0 && (
-            <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Items</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                <ul className="divide-y divide-gray-200">
+            <div className="mt-8">
+              <h3 className="text-lg font-medium text-gray-300 mb-4">Order Items</h3>
+              <div className="bg-gray-900/30 rounded-lg overflow-hidden">
+                <div className="grid grid-cols-4 gap-4 p-4 border-b border-gray-700/50 text-gray-400 text-sm">
+                  <div>Item Name</div>
+                  <div className="text-center">Quantity</div>
+                  <div className="text-right">Price</div>
+                  <div className="text-right">Total</div>
+                </div>
+                <ul className="divide-y divide-gray-700/50">
                   {order.items.map((item, index) => (
-                    <li key={item._id || index} className="py-2">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <span className="font-medium">{item.itemName}</span>
-                          <span className="ml-2 text-gray-500">({item.quantity} items)</span>
-                        </div>
-                        <div className="text-right">
-                          <div>Rs. {item.price} each</div>
-                          <div className="text-sm text-gray-500">
-                            Total: Rs. {(item.quantity * item.price).toFixed(2)}
-                          </div>
+                    <li key={item._id || index} className="p-4">
+                      <div className="grid grid-cols-4 gap-4 items-center">
+                        <div className="text-gray-300 font-medium">{item.itemName}</div>
+                        <div className="text-center text-gray-400">{item.quantity}</div>
+                        <div className="text-right text-gray-400">Rs. {item.price}</div>
+                        <div className="text-right text-gray-300 font-medium">
+                          Rs. {(item.quantity * item.price).toFixed(2)}
                         </div>
                       </div>
                     </li>
                   ))}
                 </ul>
-              </dd>
+              </div>
             </div>
           )}
-        </dl>
+
+          <div className="mt-6 flex justify-between items-center">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                          bg-cyan-900/30 text-cyan-300 border border-cyan-500/30">
+              {order.status}
+            </span>
+            <div className="text-right">
+              <div className="text-gray-400 text-sm">Total Amount</div>
+              <div className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                Rs. {order.total.toFixed(2)}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

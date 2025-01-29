@@ -107,159 +107,170 @@ function OrderForm() {
   };
 
   return (
-    <div className="bg-white shadow rounded-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
-        {isEditing ? 'Edit Order' : 'Create New Order'}
-      </h2>
+    <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-6">
+          {isEditing ? 'Edit Order' : 'Create New Order'}
+        </h2>
 
-      {errors.submit && (
-        <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-md">
-          {errors.submit}
-        </div>
-      )}
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl shadow-xl border border-gray-700/50 p-6">
+          {errors.submit && (
+            <div className="mb-4 p-4 bg-red-900/50 border border-red-500/50 text-red-300 rounded-lg">
+              {errors.submit}
+            </div>
+          )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Customer Name</label>
-          <input
-            type="text"
-            value={formData.customer}
-            onChange={(e) => {
-              setFormData({ ...formData, customer: e.target.value });
-              if (errors.customer) {
-                setErrors(prev => {
-                  const newErrors = { ...prev };
-                  delete newErrors.customer;
-                  return newErrors;
-                });
-              }
-            }}
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500
-              ${errors.customer ? 'border-red-500' : ''}`}
-          />
-          {errors.customer && <p className="text-red-500 text-sm mt-1">{errors.customer}</p>}
-        </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-300">Customer Name</label>
+              <input
+                type="text"
+                value={formData.customer}
+                onChange={(e) => {
+                  setFormData({ ...formData, customer: e.target.value });
+                  if (errors.customer) {
+                    setErrors(prev => {
+                      const newErrors = { ...prev };
+                      delete newErrors.customer;
+                      return newErrors;
+                    });
+                  }
+                }}
+                className={`mt-1 w-full bg-gray-900/50 border border-gray-700/50 rounded-lg px-4 py-2.5
+                         text-gray-300 placeholder-gray-500
+                         focus:ring-2 focus:ring-cyan-500/50 focus:border-transparent
+                         transition-all duration-200
+                         ${errors.customer ? 'border-red-500/50' : ''}`}
+              />
+              {errors.customer && <p className="text-red-400 text-sm mt-1">{errors.customer}</p>}
+            </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Order Date</label>
-          <input
-            type="text"
-            value={formData.date}
-            readOnly
-            className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm"
-          />
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300">Order Date</label>
+              <input
+                type="text"
+                value={formData.date}
+                readOnly
+                className="mt-1 w-full bg-gray-900/50 border border-gray-700/50 rounded-lg px-4 py-2.5
+                         text-gray-300 placeholder-gray-500"
+              />
+            </div>
 
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <label className="block text-lg font-medium text-gray-700">Items</label>
-            <button
-              type="button"
-              onClick={addItem}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-            >
-              Add New Item
-            </button>
-          </div>
-
-          {formData.items.map((item, index) => (
-            <div key={index} className="bg-gray-50 p-4 rounded-lg space-y-4">
+            <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-gray-500">Item #{index + 1}</span>
-                {formData.items.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeItem(index)}
-                    className="text-red-600 hover:text-red-800 text-sm"
-                  >
-                    Remove Item
-                  </button>
-                )}
+                <label className="block text-lg font-medium text-gray-300">Items</label>
+                <button
+                  type="button"
+                  onClick={addItem}
+                  className="inline-flex items-center px-4 py-2 bg-cyan-600/20 border border-cyan-500/30 
+                           text-cyan-300 text-sm font-medium rounded-lg hover:bg-cyan-600/30 
+                           transition-colors duration-200"
+                >
+                  Add New Item
+                </button>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Item Name</label>
-                <input
-                  type="text"
-                  placeholder="Enter item name"
-                  value={item.itemName}
-                  onChange={(e) => handleItemChange(index, 'itemName', e.target.value)}
-                  className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500
-                    ${errors[`itemName${index}`] ? 'border-red-500' : ''}`}
-                />
-                {errors[`itemName${index}`] && (
-                  <p className="text-red-500 text-sm mt-1">{errors[`itemName${index}`]}</p>
-                )}
-              </div>
+              {formData.items.map((item, index) => (
+                <div key={index} className="bg-gray-900/50 p-4 rounded-lg space-y-4 border border-gray-700/50">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-400">Item #{index + 1}</span>
+                    {formData.items.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeItem(index)}
+                        className="text-red-400 hover:text-red-300 text-sm transition-colors duration-200"
+                      >
+                        Remove Item
+                      </button>
+                    )}
+                  </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Quantity</label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={item.quantity === 0 ? '' : item.quantity}
-                  onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value) || 0)}
-                  min="1"
-                  className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500
-                    ${errors[`quantity${index}`] ? 'border-red-500' : ''}`}
-                />
-                {errors[`quantity${index}`] && (
-                  <p className="text-red-500 text-sm mt-1">{errors[`quantity${index}`]}</p>
-                )}
-              </div>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300">Item Name</label>
+                      <input
+                        type="text"
+                        placeholder="Enter item name"
+                        value={item.itemName}
+                        onChange={(e) => handleItemChange(index, 'itemName', e.target.value)}
+                        className="mt-1 w-full bg-gray-900/50 border border-gray-700/50 rounded-lg px-4 py-2.5
+                                 text-gray-300 placeholder-gray-500
+                                 focus:ring-2 focus:ring-cyan-500/50 focus:border-transparent"
+                      />
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Price per Unit (Rs.)</label>
-                <input
-                  type="text"
-                  placeholder="Enter price"
-                  value={item.price === 0 ? '' : item.price}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    if (value === '' || /^\d*\.?\d*$/.test(value)) {
-                      handleItemChange(index, 'price', parseFloat(value) || 0);
-                    }
-                  }}
-                  className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500
-                    ${errors[`price${index}`] ? 'border-red-500' : ''}`}
-                />
-                {errors[`price${index}`] && (
-                  <p className="text-red-500 text-sm mt-1">{errors[`price${index}`]}</p>
-                )}
-              </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300">Quantity</label>
+                      <input
+                        type="number"
+                        placeholder="0"
+                        value={item.quantity === 0 ? '' : item.quantity}
+                        onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value) || 0)}
+                        min="1"
+                        className="mt-1 w-full bg-gray-900/50 border border-gray-700/50 rounded-lg px-4 py-2.5
+                                 text-gray-300 placeholder-gray-500
+                                 focus:ring-2 focus:ring-cyan-500/50 focus:border-transparent"
+                      />
+                    </div>
 
-              <div className="pt-2 border-t border-gray-200">
-                <div className="text-right text-sm font-medium text-gray-700">
-                  Item Total: Rs. {(item.quantity * item.price).toFixed(2)}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300">Price per Unit (Rs.)</label>
+                      <input
+                        type="text"
+                        placeholder="Enter price"
+                        value={item.price === 0 ? '' : item.price}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                            handleItemChange(index, 'price', parseFloat(value) || 0);
+                          }
+                        }}
+                        className="mt-1 w-full bg-gray-900/50 border border-gray-700/50 rounded-lg px-4 py-2.5
+                                 text-gray-300 placeholder-gray-500
+                                 focus:ring-2 focus:ring-cyan-500/50 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div className="pt-2 border-t border-gray-700/50">
+                      <div className="text-right text-sm font-medium text-gray-300">
+                        Item Total: Rs. {(item.quantity * item.price).toFixed(2)}
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              ))}
+            </div>
+
+            <div className="flex justify-between items-center pt-6 border-t border-gray-700/50">
+              <div className="text-lg font-semibold text-gray-300">
+                Order Total: Rs. {formData.total.toFixed(2)}
+              </div>
+              <div className="space-x-4">
+                <button
+                  type="button"
+                  onClick={() => navigate('/orders')}
+                  className="px-6 py-2.5 bg-gray-700/50 hover:bg-gray-700/70 
+                           text-gray-300 font-medium rounded-lg
+                           transition-colors duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-500 
+                           hover:from-cyan-600 hover:to-blue-600
+                           text-white font-medium rounded-lg
+                           transform hover:-translate-y-0.5 transition-all duration-200
+                           shadow-lg hover:shadow-cyan-500/25"
+                >
+                  {isEditing ? 'Update Order' : 'Create Order'}
+                </button>
               </div>
             </div>
-          ))}
+          </form>
         </div>
-
-        <div className="flex justify-between items-center pt-6 border-t border-gray-200">
-          <div className="text-lg font-semibold text-gray-900">
-            Order Total: Rs. {formData.total.toFixed(2)}
-          </div>
-          <div className="space-x-4">
-            <button
-              type="button"
-              onClick={() => navigate('/orders')}
-              className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-            >
-              {isEditing ? 'Update Order' : 'Create Order'}
-            </button>
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
-    
   );
 }
 
