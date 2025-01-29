@@ -46,6 +46,14 @@ function OrderForm() {
       items: newItems,
       total: calculateTotal(newItems)
     });
+
+    if (errors[`${field}${index}`]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[`${field}${index}`];
+        return newErrors;
+      });
+    }
   };
 
   const addItem = () => {
@@ -72,9 +80,9 @@ function OrderForm() {
     if (!formData.date) newErrors.date = 'Date is required';
     
     formData.items.forEach((item, index) => {
-      if (!item.itemName.trim()) newErrors[`item${index}`] = 'Item name is required';
-      if (item.quantity < 1) newErrors[`quantity${index}`] = 'Quantity must be at least 1';
-      if (item.price < 0) newErrors[`price${index}`] = 'Price must be positive';
+      if (!item.itemName.trim()) newErrors[`itemName${index}`] = 'Item name is required';
+      if (!item.quantity || item.quantity <= 0) newErrors[`quantity${index}`] = 'Quantity must be greater than 0';
+      if (!item.price || item.price <= 0) newErrors[`price${index}`] = 'Price must be greater than 0';
     });
 
     setErrors(newErrors);
@@ -94,21 +102,38 @@ function OrderForm() {
       navigate('/orders');
     } catch (error) {
       console.error('Failed to save order:', error);
+      setErrors({ submit: 'Failed to save order. Please try again.' });
     }
   };
 
   return (
     <div className="bg-white shadow rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-6">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">
         {isEditing ? 'Edit Order' : 'Create New Order'}
       </h2>
+
+      {errors.submit && (
+        <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-md">
+          {errors.submit}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700">Customer Name</label>
           <input
             type="text"
             value={formData.customer}
-            onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, customer: e.target.value });
+              if (errors.customer) {
+                setErrors(prev => {
+                  const newErrors = { ...prev };
+                  delete newErrors.customer;
+                  return newErrors;
+                });
+              }
+            }}
             className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500
               ${errors.customer ? 'border-red-500' : ''}`}
           />
@@ -160,10 +185,10 @@ function OrderForm() {
                   value={item.itemName}
                   onChange={(e) => handleItemChange(index, 'itemName', e.target.value)}
                   className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500
-                    ${errors[`item${index}`] ? 'border-red-500' : ''}`}
+                    ${errors[`itemName${index}`] ? 'border-red-500' : ''}`}
                 />
-                {errors[`item${index}`] && (
-                  <p className="text-red-500 text-sm mt-1">{errors[`item${index}`]}</p>
+                {errors[`itemName${index}`] && (
+                  <p className="text-red-500 text-sm mt-1">{errors[`itemName${index}`]}</p>
                 )}
               </div>
 

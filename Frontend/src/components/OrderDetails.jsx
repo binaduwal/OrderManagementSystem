@@ -35,7 +35,7 @@ function OrderDetails() {
         <div className="space-x-4">
           <Link
             to={`/orders/${id}/edit`}
-            className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
           >
             Edit Order
           </Link>
