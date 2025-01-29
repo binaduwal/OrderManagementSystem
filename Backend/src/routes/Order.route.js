@@ -1,6 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/orderModel');
+const cors = require('cors');
+
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+router.use(cors(corsOptions));
 
 // Create order
 router.post('/orders', async(req, res) => {
