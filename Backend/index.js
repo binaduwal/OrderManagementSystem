@@ -39,7 +39,7 @@ app.use((err, req, res, next) => {
 });
 
 // Define port
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // Connect to database and start server
 const startServer = async () => {
