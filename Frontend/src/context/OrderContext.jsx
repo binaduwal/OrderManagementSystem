@@ -83,6 +83,10 @@ export const OrderProvider = ({ children }) => {
   const removeOrder = async (id) => {
     try {
       console.log("Attempting to remove order with ID:", id);
+      if (!id) {
+        console.error("Error: Order ID is undefined.");
+        return;
+      }
       setError(null);
 
       // Find the order in the current state to get the MongoDB _id

@@ -110,6 +110,9 @@ export const updateOrder = async (id, orderData) => {
 export const deleteOrder = async (id) => {
   try {
     const url = `${API_BASE_URL}/orders/delete/${id}`;
+    if (!id) {
+      throw new Error("Order ID is undefined");
+  }
     console.log("Making delete request to:", url);
     
     const response = await fetch(url, {
