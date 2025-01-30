@@ -30,6 +30,10 @@ app.use((req, res, next) => {
 // Mount routes directly 
 app.use('/', orderRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
 // Make 404 handler more informative
 app.use((req, res) => {
   console.log(`404 - Route not found: ${req.method} ${req.url}`);
@@ -53,9 +57,6 @@ app.use((err, req, res, next) => {
     message: err.message || 'Something went wrong!',
     path: req.url
   });
-});
-app.get('/', (req, res) => {
-  res.send('Hello World');
 });
 
 // Define port
